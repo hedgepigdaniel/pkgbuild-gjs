@@ -19,6 +19,7 @@ sha256sums=('SKIP'
             'f8f6edde8cc8a55c2518cb5767cfb95b9dc56400910add753ff190497ee5265c'
             'dd900a893477f24d9a041ca7dc4261850034db56d908ce6d1e11aaba212b4d77'
             'c112e8d8b2862dcb9ba902620677039388607f19ef95c90766679a5f8f052f92')
+options=(debug !strip)
 
 pkgver() {
   cd $pkgname
@@ -35,7 +36,9 @@ prepare() {
 
 build() {
   cd $pkgname
-  ./configure --prefix=/usr --disable-static --libexecdir=/usr/lib
+  export CXXFLAGS='-g -O0'
+  export CPPFLAGS='-D_FORITFY_SOURCE=0'
+  ./configure --prefix=/usr --disable-static --libexecdir=/usr/lib --enable-debug-symbols=-gdwarf-2
   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
   make
 }
