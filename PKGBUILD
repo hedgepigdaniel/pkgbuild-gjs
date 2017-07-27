@@ -15,7 +15,6 @@ source=(
 	"git+https://git.gnome.org/browse/gjs#commit=$_commit"
 	"crash.patch::https://bug783935.bugzilla-attachments.gnome.org/attachment.cgi?id=356448&action=diff&collapsed=&context=patch&format=raw&headers=1")
 sha256sums=('SKIP' 'SKIP')
-options=(debug !strip)
 
 pkgver() {
   cd $pkgname
@@ -30,9 +29,7 @@ prepare() {
 
 build() {
   cd $pkgname
-  export CXXFLAGS='-g -O0'
-  export CPPFLAGS='-D_FORITFY_SOURCE=0'
-  ./configure --prefix=/usr --disable-static --libexecdir=/usr/lib --enable-debug-symbols=-gdwarf-2
+  ./configure --prefix=/usr --disable-static --libexecdir=/usr/lib
   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
   make
 }
