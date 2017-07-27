@@ -13,6 +13,7 @@ makedepends=(gobject-introspection git gnome-common)
 _commit=a9db649304db525ca166ec0845ee7a86cea4bf7f  # tags/1.48.6^0
 source=("git+https://git.gnome.org/browse/gjs#commit=$_commit")
 sha256sums=('SKIP')
+options=(debug !strip)
 
 pkgver() {
   cd $pkgname
@@ -26,7 +27,9 @@ prepare() {
 
 build() {
   cd $pkgname
-  ./configure --prefix=/usr --disable-static --libexecdir=/usr/lib
+  export CXXFLAGS='-g -O0'
+  export CPPFLAGS='-D_FORITFY_SOURCE=0'
+  ./configure --prefix=/usr --disable-static --libexecdir=/usr/lib --enable-debug-symbols=-gdwarf-2
   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
   make
 }
