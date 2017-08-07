@@ -2,7 +2,7 @@
 # Contributor: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=gjs
-pkgver=1.48.5
+pkgver=1.48.6
 pkgrel=1
 pkgdesc="Javascript Bindings for GNOME"
 url="https://wiki.gnome.org/Projects/Gjs"
@@ -10,11 +10,9 @@ arch=(i686 x86_64)
 license=(GPL)
 depends=(cairo gobject-introspection-runtime js38 gtk3)
 makedepends=(gobject-introspection git gnome-common)
-_commit=43c5d7839630dd166372f2c404a9a72c87fd102a  # tags/1.48.5^0
-source=(
-	"git+https://git.gnome.org/browse/gjs#commit=$_commit"
-	"crash.patch::https://bug783935.bugzilla-attachments.gnome.org/attachment.cgi?id=356448&action=diff&collapsed=&context=patch&format=raw&headers=1")
-sha256sums=('SKIP' 'SKIP')
+_commit=a9db649304db525ca166ec0845ee7a86cea4bf7f  # tags/1.48.6^0
+source=("git+https://git.gnome.org/browse/gjs#commit=$_commit")
+sha256sums=('SKIP')
 
 pkgver() {
   cd $pkgname
@@ -23,7 +21,6 @@ pkgver() {
 
 prepare() {
   cd $pkgname
-  patch -p1 -i "${srcdir}/crash.patch"
   NOCONFIGURE=1 ./autogen.sh
 }
 
