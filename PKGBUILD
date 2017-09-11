@@ -2,7 +2,7 @@
 # Contributor: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=gjs
-pkgver=1.48.6
+pkgver=1.48.7
 pkgrel=1
 pkgdesc="Javascript Bindings for GNOME"
 url="https://wiki.gnome.org/Projects/Gjs"
@@ -10,17 +10,11 @@ arch=(i686 x86_64)
 license=(GPL)
 depends=(cairo gobject-introspection-runtime js38 gtk3)
 makedepends=(gobject-introspection git gnome-common)
-_commit=a9db649304db525ca166ec0845ee7a86cea4bf7f  # tags/1.48.6^0
+_commit=96a06c8cdf3e2e28d0d77bb7073c004f6ac4c1e6  # tags/1.48.7^0
 source=("git+https://git.gnome.org/browse/gjs#commit=$_commit"
-	"785657-358257.patch"
-	"785657-358258.patch"
-	"785657-358259.patch"
-	"785657-358380.patch")
+	"786186-359381.patch")
 sha256sums=('SKIP'
-            'f8f6edde8cc8a55c2518cb5767cfb95b9dc56400910add753ff190497ee5265c'
-            'dd900a893477f24d9a041ca7dc4261850034db56d908ce6d1e11aaba212b4d77'
-            'c112e8d8b2862dcb9ba902620677039388607f19ef95c90766679a5f8f052f92'
-            '15684878bf4881457ad3c94d463b03bf9271c3eba4862f6a05cb12ec96a7bb0d')
+            '1b7aefc4b7ffb5f1e68776616ef8913d3f4ea4f95b18c110d8a0bb0487164ec5')
 options=(debug !strip)
 
 pkgver() {
@@ -30,10 +24,7 @@ pkgver() {
 
 prepare() {
   cd $pkgname
-  patch -p1 -i ../785657-358257.patch
-  patch -p1 -i ../785657-358258.patch
-  patch -p1 -i ../785657-358259.patch
-  patch -p1 -i ../785657-358380.patch
+  patch -p1 -i ../786186-359381.patch
   NOCONFIGURE=1 ./autogen.sh
 }
 

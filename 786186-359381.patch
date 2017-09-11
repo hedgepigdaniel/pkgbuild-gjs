@@ -1,0 +1,63 @@
+diff --git a/gi/function.cpp b/gi/function.cpp
+index afe05a4..8160669 100644
+--- a/gi/function.cpp
++++ b/gi/function.cpp
+@@ -192,11 +192,7 @@ gjs_callback_closure(ffi_cif *cif,
+                    "widget with ::destroy signals connected, but can also be caused by "
+                    "using the destroy() or dispose() vfuncs. Because it would crash the "
+                    "application, it has been blocked and the JS callback not invoked.");
+-        /* A gjs_dumpstack() would be nice here, but we can't,
+-           because that works by creating a new Error object and
+-           reading the stack property, which is the worst possible
+-           idea during a GC session.
+-        */
++        gjs_dumpstack();
+         gjs_callback_trampoline_unref(trampoline);
+         return;
+     }
+diff --git a/gi/value.cpp b/gi/value.cpp
+index a89a4da..de11377 100644
+--- a/gi/value.cpp
++++ b/gi/value.cpp
+@@ -154,11 +154,7 @@ closure_marshal(GClosure        *closure,
+             g_critical("The offending signal was %s on %s %p.", signal_query.signal_name,
+                        g_type_name(G_TYPE_FROM_INSTANCE(instance)), instance);
+         }
+-        /* A gjs_dumpstack() would be nice here, but we can't,
+-           because that works by creating a new Error object and
+-           reading the stack property, which is the worst possible
+-           idea during a GC session.
+-        */
++        gjs_dumpstack();
+         return;
+     }
+ 
+diff --git a/gjs/stack.cpp b/gjs/stack.cpp
+index f1aa8aa..8aa7abe 100644
+--- a/gjs/stack.cpp
++++ b/gjs/stack.cpp
+@@ -88,23 +88,8 @@ void
+ gjs_context_print_stack_stderr(GjsContext *context)
+ {
+     JSContext *cx = (JSContext*) gjs_context_get_native_context(context);
+-    JS::RootedValue v_stack(cx);
+-    char *stack;
+-
+     g_printerr("== Stack trace for context %p ==\n", context);
+-
+-    /* Stderr is locale encoding, so we use string_to_filename here */
+-    /* COMPAT: mozilla::Maybe gains a much more usable API in future versions */
+-    mozilla::Maybe<JS::MutableHandleValue> none,
+-        m_stack = mozilla::Some<JS::MutableHandleValue>(&v_stack);
+-    if (!gjs_context_get_frame_info(cx, m_stack, none, none) ||
+-        !gjs_string_to_filename(cx, v_stack, &stack)) {
+-        g_printerr("No stack trace available\n");
+-        return;
+-    }
+-
+-    g_printerr("%s\n", stack);
+-    g_free(stack);
++    js_DumpBacktrace(cx);
+ }
+ 
+ void
